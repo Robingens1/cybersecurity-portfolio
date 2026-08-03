@@ -30,7 +30,7 @@ The objective of this lab is to intercept a simulated malware transfer request o
    ```bash
    ip a
    ```
-   *Verified interface name `eth0` and confirmed static IP registration at `192.168.64.128/24`.*
+   *Verified interface name `eth0` and confirmed static IP registration at `192.168.xx.xxx/24`.*
 
 ![Figure 1](images/1_interface_check.png)
 *Figure 1: Verification of active network interface properties and local IP allocation via Terminal 1.*

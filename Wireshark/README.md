@@ -32,7 +32,8 @@ The goal was to capture a simulated malware download over the network, trace an 
    ```
    *Confirmed the interface name `eth0` and static IP `192.168.xx.xxx/24`.*
 
-![Figure 1](images/1_interface_check.png)
+<img width="819" height="415" alt="Kali_Linux_IP_Project1" src="https://github.com/user-attachments/assets/02e44fd4-1958-44c1-8ad9-4030513058b4" />
+
 *Figure 1: Checking the active network interface and IP address.*
 
 2. Updated and installed the packet analysis tools:
@@ -41,7 +42,8 @@ The goal was to capture a simulated malware download over the network, trace an 
    ```
    *Installed successfully from the Kali repositories.*
 
-![Figure 2](images/2_apt_initialization.png)
+<img width="827" height="455" alt="Kali_update_ _wireshark_installation_termina1" src="https://github.com/user-attachments/assets/0826b9b0-30c5-4bdb-8400-093acdd35da0" />
+
 *Figure 2: Installing Wireshark and tshark.*
 
 ---
@@ -57,7 +59,10 @@ The goal was to capture a simulated malware download over the network, trace an 
    ```
 3. **First observation:** the download only pulled in **266 bytes** before stopping.
 
-![Figure 3](images/3_initial_curl_transfer.png)
+<img width="730" height="315" alt="kali_wireshark_simulation_ _download_terminal2_first_attempt" src="https://github.com/user-attachments/assets/4aa4d0ca-665f-4cbb-a0b9-d40698a5c757" />
+<img width="553" height="274" alt="image" src="https://github.com/user-attachments/assets/90ed6245-5875-49f2-8a7e-d1b570482098" />
+
+
 *Figure 3: curl transfer stopping early.*
 
 4. Stopped the capture in Terminal 1 with `Ctrl + C` and checked the file:
@@ -75,19 +80,24 @@ The goal was to capture a simulated malware download over the network, trace an 
    ```
 2. Looked through the unfiltered capture first, and saw normal background noise — DNS lookups to `192.168.64.2`, ARP broadcasts, and some unrelated scan traffic aimed at another device on the network (`192.168.64.129`).
 
-![Figure 4](images/4_unfiltered_pcap_view.png)
+<img width="991" height="582" alt="Wireshark_Fresh_Capture1" src="https://github.com/user-attachments/assets/9cf41e3c-0561-4dd9-ac36-bd92972d5f66" />
+<img width="720" height="140" alt="image" src="https://github.com/user-attachments/assets/ed7e8a9b-4156-40ad-a0f5-a1a4ed8e2134" />
+
+
 *Figure 4: Unfiltered view showing normal background traffic.*
 
 3. Applied an `http` filter to isolate the actual web request:
    * **Packet #26:** My machine (`192.168.xx.xxx`) sending an unencrypted `GET / HTTP/1.1` request, using `curl/8.18.0` as the user agent.
    * **Packet #28:** The server (`89.238.73.97`) responding with `301 Moved Permanently`.
 
-![Figure 5](images/5_http_filter_dashboard.png)
+<img width="992" height="578" alt="Wireshark_http_filter_applied" src="https://github.com/user-attachments/assets/99acc40d-6bbe-4b6f-abb3-4722a86e436a" />
+
 *Figure 5: HTTP request (packet 26) and redirect response (packet 28).*
 
 4. Followed the full conversation using `tcp.stream eq 5`. This showed the server's response header pointing to `Location: https://eicar.org`, along with the 266-byte payload.
 
-![Figure 6](images/6_tcp_stream_transcript.png)
+<img width="994" height="534" alt="Wireshark_TCP_Stream-Window" src="https://github.com/user-attachments/assets/116b2150-d2f7-475a-85f7-d70e191e6ade" />
+
 *Figure 6: TCP stream showing the redirect instruction.*
 
 ---
@@ -119,12 +129,16 @@ When I tried filtering for `tls` or `ssl` traffic to see the secure connection, 
    ```
 4. **Result:** curl picked up the initial 266 bytes, followed the redirect, and downloaded the full file — **362.7 KB** over about 9 seconds.
 
-![Figure 7](images/7_remediated_curl_transfer.png)
+<img width="553" height="274" alt="image" src="https://github.com/user-attachments/assets/eadb231c-41c1-4a01-95ac-55e07e4bc4a7" />
+<img width="906" height="290" alt="kali_wireshark_simulation_ _download_terminal2_second_attempt" src="https://github.com/user-attachments/assets/aa786630-0fba-434b-986a-b0674ed89ab0" />
+
+
 *Figure 7: Full download completing successfully after following the redirect.*
 
 5. Stopped the capture with `Ctrl + C` and confirmed a much larger capture this time.
 
-![Figure 8](images/8_tcpdump_packet_counts.png)
+<img width="553" height="274" alt="image" src="https://github.com/user-attachments/assets/a90920bf-b4f7-46bd-a37d-c8b87867f519" />
+
 *Figure 8: 251 packets captured this time, compared to 179 before.*
 
 ---
@@ -141,7 +155,11 @@ When I tried filtering for `tls` or `ssl` traffic to see the secure connection, 
    * **Packets 40–172:** The actual file transfer, all encrypted as TLS 1.3 application data.
    * **Packets 173 & 175 (Teardown):** The connection closing cleanly with `FIN, ACK`.
 
-![Figure 9](images/9_tls_stream_lifecycle.png)
+<img width="990" height="588" alt="Wireshark_new_tls_packet33_detailed_inspection" src="https://github.com/user-attachments/assets/df40bd2d-d225-4363-a695-35e18495b660" />
+
+<img width="992" height="617" alt="Wireshark_new_tls_filter_applied" src="https://github.com/user-attachments/assets/1134087f-4c11-4872-be91-df91f814414d" />
+
+
 *Figure 9: Full TLS session lifecycle, from handshake to teardown.*
 
 ---

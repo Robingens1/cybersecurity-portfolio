@@ -1,0 +1,87 @@
+# Automated IOC Log Analyzer & Threat Intelligence Triage Tool
+
+## 📌 Project Overview
+In enterprise environments, brute-force attacks and malicious scanning generate massive volumes of unstructured log data. Manually parsing these files during an incident slows down triage and increases Mean Time to Resolution (MTTR). 
+
+This project is a **Python 3 Security Automation Tool** designed to instantly ingest raw server authentication logs, extract targeting IP addresses using regular expressions (Regex), aggregate brute-force authentication attempts, and triage indicators of compromise (IOCs) against reputation databases to output distinct operational threat verdicts.
+
+### 🌟 Key Features
+* **Automated Log Parsing:** Utilizes optimized Regular Expressions (`re`) to systematically extract IPv4 patterns from chaotic log streams.
+* **Telemetry Aggregation:** Leverages structural mapping logic to count, isolate, and filter recurring threat actors breaching defined failure thresholds.
+* **Dynamic Risk Assessment:** References centralized cyber threat intelligence (CTI) infrastructure feeds to map percentage risk profiles.
+* **Resilient Exception Handling:** Built with robust `try/except` safety blocks to handle network drops or API rate-limiting gracefully without script termination.
+* **Enterprise Security Hygiene:** Engineered with explicit configuration isolation using `.gitignore` mappings to ensure production API tokens remain strictly unexposed.
+
+---
+
+## 🛠️ Tech Stack & Architecture
+* **Language:** Python 3
+* **Libraries:** `re` (Pattern Matching), `sys` (Runtime Arguments), `collections.Counter` (Telemetry Tallies), `requests` (API Communications)
+* **Environment:** Kali Linux (Debian) / Windows Staging Labs
+* **Version Control:** Git & GitHub Cloud Deployment
+
+---
+
+## 📸 Step-by-Step Engineering Timeline & Visual Proof
+
+### 1. Environment & Virtual Workspace Setup
+Proven initialization of an isolated, dedicated python virtual environment workspace inside a Kali Linux framework utilizing localized dependencies.
+![Environment Setup](./screenshot-1-environment-setup.png.jpg)
+
+### 2. Code Architecture & Implementation Core
+Development of the main automated pipeline engine coordinating log ingest modules with target assessment functions.
+![Code Core](./screenshot-2-code-implementation.png.jpg)
+
+### 3. Data Leak Prevention & Privacy Guards
+Configuring structural `.gitignore` privacy shields to cleanly separate public repository staging templates from real security credentials.
+![Privacy Shield](./screenshot-2-gitignore-setup.png.jpg)
+
+### 4. Resilient Engineering & Exception Handling
+Proactive validation of code stability loops. The script captures unexpected network drops or connection limits gracefully without throwing critical traceback failures.
+![Error Handling](./screenshot-3-network-exception-handling.png.jpg)
+
+### 5. Virtual Network & Lab Diagnostics
+Reconfiguring virtualization layer network adapters to properly map paths from the virtual machine sandbox out to external database gateways.
+![Network Fix](./screenshot-4-nat-adapter-configuration.png.jpg)
+
+### 6. Successful Live Threat Triage Production Output
+The final operational execution result table cleanly mapping target malicious IPs, authenticated log hit volume, intelligence scores, and automated security verdicts.
+![Threat Verdict](./screenshot-5-successful-threat-triage.png.jpg)
+
+### 7. Secure Repository Publishing & Token Authentication
+Publishing final production assets live to a cloud repository using encrypted Personal Access Token (PAT) authentication workflows.
+![Cloud Push](./screenshot-7-github-deployment.png.jpg)
+
+---
+
+## 🚀 How to Run this Tool Locally
+
+### 1. Clone the Workspace
+```bash
+git clone https://github.com
+cd cybersecurity-portfolio/Project-4-IOC-Log-Analyzer
+```
+
+### 2. Initialize the Staging Environment
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+### 3. Deploy Credentials
+Create a private configuration file named `config.py` in the root folder and add your specific CTI key:
+```python
+API_KEY = "your_actual_api_key_here"
+```
+
+### 4. Execute Analysis
+Pass your raw data directly into the script pipeline:
+```bash
+python3 analyzer.py sample_logs.txt
+```
+
+---
+
+## 📈 Operational Impact
+By deploying this automation script, a Security Operations Center (SOC) team can compress the initial detection and triage phase of a log investigation from minutes to sub-seconds, allowing analysts to immediately pivot towards active containment and firewall blocking strategies.

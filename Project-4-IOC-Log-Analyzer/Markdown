@@ -1,9 +1,9 @@
 # Automated IOC Log Analyzer & Threat Intelligence Triage Tool
 
 ## 📌 Project Overview
-In enterprise environments, brute-force attacks and malicious scanning generate massive volumes of unstructured log data. Manually parsing these files during an incident slows down triage and increases Mean Time to Resolution (MTTR). 
+In enterprise network environments, brute-force attacks and automated scanning generate massive volumes of unstructured log data. Manually parsing these files during an incident response window slows down triage and increases Mean Time to Resolution (MTTR). 
 
-This project is a **Python 3 Security Automation Tool** designed to instantly ingest raw server authentication logs, extract targeting IP addresses using regular expressions (Regex), aggregate brute-force authentication attempts, and triage indicators of compromise (IOCs) against reputation databases to output distinct operational threat verdicts.
+This project is a **Python 3 Security Automation Tool** designed to instantly ingest raw server authentication logs, extract targeting IP addresses using regular expressions (Regex), aggregate brute-force authentication volumes, and triage indicators of compromise (IOCs) against reputation databases to output distinct operational threat verdicts.
 
 ### 🌟 Key Features
 * **Automated Log Parsing:** Utilizes optimized Regular Expressions (`re`) to systematically extract IPv4 patterns from chaotic log streams.
@@ -19,6 +19,118 @@ This project is a **Python 3 Security Automation Tool** designed to instantly in
 * **Libraries:** `re` (Pattern Matching), `sys` (Runtime Arguments), `collections.Counter` (Telemetry Tallies), `requests` (API Communications)
 * **Environment:** Kali Linux (Debian) / Windows Staging Labs
 * **Version Control:** Git & GitHub Cloud Deployment
+
+---
+
+## 💻 Complete Production Source Code
+
+### 1. Core Automation Script (`analyzer.py`)
+This is the main intelligence pipeline that parses data, handles API errors, and formats the triage output table.
+
+```python
+import re
+import sys
+from collections import Counter
+import requests
+from config import API_KEY
+
+FAILURE_THRESHOLD = 3
+ABUSEIPDB_URL = "https://abuseipdb.com"
+
+
+def extract_ips(log_path):
+    """Scan the entire log file and pull out every IPv4 address found."""
+    ip_pattern = r"\b(?:\d{1,3}\.){3}\d{1,3}\b"
+    ips = []
+    with open(log_path, "r") as f:
+        for line in f:
+            found = re.findall(ip_pattern, line)
+            ips.extend(found)
+    return ips
+
+
+def flag_suspicious(ip_list, threshold=FAILURE_THRESHOLD):
+    """Count how many times each IP appears; flag those meeting the threshold."""
+    counts = Counter(ip_list)
+    return {ip: count for ip, count in counts.items() if count >= threshold}
+
+
+def check_abuseipdb(ip):
+    """Query the AbuseIPDB API for the IP's malicious reputation score."""
+    headers = {"Key": API_KEY, "Accept": "application/json"}
+    params = {"ipAddress": ip, "maxAgeInDays": "90"}
+    try:
+        response = requests.get(ABUSEIPDB_URL, headers=headers, params=params, timeout=10)
+        response.raise_for_status()
+        data = response.json()["data"]
+        return data.get("abuseConfidenceScore", 0)
+    except requests.RequestException as e:
+        print(f"  [!] Lookup failed for {ip}: {e}")
+        return None
+
+
+def verdict(score):
+    """Translate numerical risk percentages into clear risk categories."""
+    if score is None:
+        return "UNKNOWN (lookup failed)"
+    if score >= 50:
+        return "HIGH RISK"
+    if score >= 20:
+        return "MEDIUM RISK"
+    return "LOW RISK"
+
+
+def main(log_path):
+    """Execute the core automation pipeline and output a clean table."""
+    print(f"Analyzing {log_path}...\n")
+    ips = extract_ips(log_path)
+    flagged = flag_suspicious(ips)
+
+    if not flagged:
+        print("No IPs met the suspicious activity threshold.")
+        return
+
+    print(f"{'IP Address':<20}{'Failed Hits':<15}{'Abuse Score':<18}{'Security Verdict'}")
+    print("-" * 70)
+
+    for ip, count in sorted(flagged.items(), key=lambda x: x, reverse=True):
+        score = check_abuseipdb(ip)
+        # Handle case where score lookup fails or returns None
+        score_str = f"{score}%" if score is not None else "None%"
+        print(f"{ip:<20}{count:<15}{score_str:<18}{verdict(score)}")
+
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: python3 analyzer.py <path_to_log_file>")
+        sys.exit(1)
+    main(sys.argv[1])
+```
+
+### 2. Public Configuration Template (`config_example.py`)
+This file is published to the public repository to instruct external users on configuration formatting without exposing active infrastructure tokens.
+
+```python
+API_KEY = "your-key-here"
+```
+
+### 3. Repository Privacy Shield (`.gitignore`)
+Explicit instructions to prevent localized virtual environment dependencies and private credentials from tracking onto public branches.
+
+```text
+venv/
+config.py
+__pycache__/
+```
+
+---
+
+## 📝 Code Logic & Component Breakdown
+
+* **`extract_ips(log_path)`**: Leverages boundary-restricted Regular Expressions (`r"\b(?:\d{1,3}\.){3}\d{1,3}\b"`) to act like a precision comb, scanning chaotic line strings to isolate cleanly structured IPv4 addresses.
+* **`flag_suspicious(ip_list)`**: Utilizes Python's low-overhead `collections.Counter` memory array to count address frequencies instantaneously, isolating threat profiles exceeding the defined brute-force attack threshold.
+* **`check_abuseipdb(ip)`**: Automates external intelligence requests using the `requests` library. Transmits secure credential headers over TLS to retrieve modern CTI malicious reputation tracking indices.
+* **`verdict(score)`**: Converts abstract, numerical backend API indicators into real-world operational security levels (`HIGH RISK`, `MEDIUM RISK`, `LOW RISK`) to drive faster security triage.
 
 ---
 

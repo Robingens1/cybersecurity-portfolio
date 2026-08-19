@@ -1,8 +1,7 @@
 # Capstone Project: Demonstrating FTP vs. SFTP Security
 
 ## Executive Summary
-This laboratory project provides a practical demonstration contrasting the security baselines of the unencrypted File Transfer Protocol (FTP) against the secure, cryptographic Secure File Transfer Protocol (SFTP). Utilizing a virtualized environment, network traffic was actively intercepted using a packet analyzer during standard authentication and file upload operations. The objective of this capstone is to prove the vulnerability of p<img width="513" height="149" alt="Verification of unencrypted vsftpd configuration file parameters (local_enable and write_enable enabled)" src="https://github.com/user-attachments/assets/23c7d396-c402-455c-a2b4-15a3344e0605" />
-laintext transmissions to credential harvesting and data payload extraction, verifying the critical necessity of transport-layer encryption in enterprise networks.
+This laboratory project provides a practical demonstration contrasting the security baselines of the unencrypted File Transfer Protocol (FTP) against the secure, cryptographic Secure File Transfer Protocol (SFTP). Utilizing a virtualized environment, network traffic was actively intercepted using a packet analyzer during standard authentication and file upload operations. The objective of this capstone is to prove the vulnerability of plaintext transmissions to credential harvesting and data payload extraction, verifying the critical necessity of transport-layer encryption in enterprise networks.
 
 ## Environment Details
 *   **Operating System:** Kali Linux (Rolling Edition)
@@ -23,8 +22,7 @@ To establish an active laboratory environment, the target transfer protocols wer
 The File Transfer Protocol daemon (`vsftpd`) was modified to permit local user logging and administrative data-writing privileges.
 
 ```text
-<img width="513" height="149" alt="Verification of unencrypted vsftpd configuration file parameters (local_enable and write_enable enabled)" src="https://github.com/user-attachments/assets/7902f2fc-adee-4dea-9de4-892e16d69885" />
-
+![Uploading Verification of unencrypted vsftpd configuration file parameters (local_enable and write_enable enabled).jpg…]()
 
 Figure 1.1: Verification of unencrypted vsftpd configuration file parameters (local_enable and write_enable enabled).
 ```
@@ -33,16 +31,12 @@ Figure 1.1: Verification of unencrypted vsftpd configuration file parameters (lo
 A dedicated non-root account was created to validate standard authentication parameters alongside a dummy high-value payload file.
 
 ```text
-<img width="549" height="471" alt="Creation of the target test user account (labuser) on the local host" src="https://github.com/user-attachments/assets/0ce00b92-4a36-4ada-80ec-e32237dfa70e" />
-
-
+[Insert your user creation screenshot here]
 Figure 1.2: Creation of the target test user account (labuser) on the local host.
 ```
 
 ```text
-<img width="747" height="56" alt="Creation of the sensitive plaintext payload file (secret txt) prior to network transmission" src="https://github.com/user-attachments/assets/9e89104e-f08d-48da-b9dd-5ac99940cd88" />
-
-
+[Insert your file creation screenshot here]
 Figure 1.3: Creation of the sensitive plaintext payload file (secret.txt) prior to network transmission.
 ```
 
@@ -56,8 +50,7 @@ An active network capture session was bound to the loopback interface (`lo`) pri
 The client connected unencrypted via TCP Port 21, authenticating and pushing the sensitive file to the server.
 
 ```text
-<img width="1159" height="359" alt="Interactive terminal session showing successful vsftpd authentication and unencrypted file transmission (secret txt) via the local loopback interface" src="https://github.com/user-attachments/assets/8827cc0a-8205-423e-a59a-822fe38ada62" />
-
+[Insert your image_RBRZj3.png screenshot here]
 Figure 2.0: Interactive terminal session showing successful vsftpd authentication and unencrypted file transmission (secret.txt) via the local loopback interface.
 ```
 
@@ -65,8 +58,7 @@ Figure 2.0: Interactive terminal session showing successful vsftpd authenticatio
 Applying an active display filter for the `ftp` protocol immediately isolated the control channel, mapping the unencrypted request sequences explicitly.
 
 ```text
-<img width="982" height="515" alt="ftp plaintext wireshark" src="https://github.com/user-attachments/assets/1a796de9-157a-4b0d-b2f2-fb458193e0ad" />
-
+[Insert your image_0G84Yl.png screenshot here]
 Figure 2.1: Wireshark packet capture session logging unencrypted FTP control channel traffic over the loopback interface.
 ```
 
@@ -76,8 +68,7 @@ Reconstructing the underlying TCP stream compiled the fragmented parameters back
 *   **Password:** `password123`
 
 ```text
-<img width="894" height="489" alt="Plaintext credential extraction via Wireshark TCP Stream inspection of the unencrypted FTP control channel" src="https://github.com/user-attachments/assets/9ae8c1a1-fcae-40ba-bcca-c28e31537437" />
-
+[Insert your Wireshark FTP Follow TCP Stream popup screenshot here]
 Figure 2.2: Plaintext credential extraction via Wireshark TCP Stream inspection of the unencrypted FTP control channel.
 ```
 
@@ -85,8 +76,7 @@ Figure 2.2: Plaintext credential extraction via Wireshark TCP Stream inspection 
 Isolating the active data transfer channel (`ftp-data` filter) and mapping the reconstructed TCP stream extracted the complete contents of `secret.txt` seamlessly without any cryptographic resistance.
 
 ```text
-<img width="859" height="579" alt="Successful extraction of transmitted plaintext file contents (secret txt) via Wireshark ftp-data stream reconstruction" src="https://github.com/user-attachments/assets/3dc935f4-2640-4d07-9601-fa0dd956f25a" />
-
+[Insert your Wireshark ftp-data Follow TCP Stream popup screenshot here]
 Figure 2.3: Successful extraction of transmitted plaintext file contents (secret.txt) via Wireshark ftp-data stream reconstruction.
 ```
 
@@ -100,8 +90,7 @@ To document mitigation protocols, the secure sub-system was activated to transit
 The initial handshake triggered a host-key verification prompt to protect the transaction against local machine spoofing or Man-in-the-Middle (MitM) interference.
 
 ```text
-<img width="591" height="117" alt="SSH host key verification prompt during the initial secure SFTP connection initialization to the local loopback interface" src="https://github.com/user-attachments/assets/e5e7a005-2561-473f-a4b3-a6e4c7967c26" />
-
+[Insert your image_-5JwMh.png screenshot here]
 Figure 3.0: SSH host key verification prompt during the initial secure SFTP connection initialization to the local loopback interface.
 ```
 
@@ -109,8 +98,7 @@ Figure 3.0: SSH host key verification prompt during the initial secure SFTP conn
 The client authenticated securely, transferring `secret.txt` directly to the `/home/labuser/` directory over an encrypted sub-channel.
 
 ```text
-<img width="540" height="339" alt="Interactive terminal session showing successful SFTP authentication and secure, encrypted file upload (secret txt) over the loopback interface" src="https://github.com/user-attachments/assets/f82f4e23-8ae2-4095-8822-b29d4d6cb8bd" />
-
+[Insert your image_LkNSDX.png screenshot here]
 Figure 3.1: Interactive terminal session showing successful SFTP authentication and secure, encrypted file upload (secret.txt) over the loopback interface.
 ```
 
@@ -118,8 +106,7 @@ Figure 3.1: Interactive terminal session showing successful SFTP authentication 
 Filtering for the `ssh` protocol confirmed that all transactional, authentication, and directory details were completely encapsulated within opaque `SSHv2` packets over TCP Port 22.
 
 ```text
-<img width="967" height="494" alt="Wireshark packet capture session displaying encrypted SSHv2 packets isolating the secure SFTP session from data sniffing" src="https://github.com/user-attachments/assets/781f8361-ec1d-4ee2-b88d-f80ad8b72286" />
-
+[Insert your image_n0c_Rl.png screenshot here]
 Figure 3.2: Wireshark packet capture session displaying encrypted SSHv2 packets isolating the secure SFTP session from data sniffing.
 ```
 
@@ -127,8 +114,7 @@ Figure 3.2: Wireshark packet capture session displaying encrypted SSHv2 packets 
 Attempting a complete TCP Stream reconstruction revealed high-entropy randomized ciphertext symbols. Neither the password credentials nor the file payload data could be read or extracted by the analyzer.
 
 ```text
-<img width="852" height="543" alt="Cryptographic protection validation showing unreadable ciphertext session data via Wireshark TCP Stream inspection of the SFTP session" src="https://github.com/user-attachments/assets/eb6ca83f-0d62-403a-a993-a13e7a72f6b4" />
-
+[Insert your image_J3bTvI.png screenshot here]
 Figure 3.3: Cryptographic protection validation showing unreadable ciphertext session data via Wireshark TCP Stream inspection of the SFTP session.
 ```
 

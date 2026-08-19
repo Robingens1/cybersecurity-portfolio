@@ -1,7 +1,8 @@
 # Capstone Project: Demonstrating FTP vs. SFTP Security
 
 ## Executive Summary
-This laboratory project provides a practical demonstration contrasting the security baselines of the unencrypted File Transfer Protocol (FTP) against the secure, cryptographic Secure File Transfer Protocol (SFTP). Utilizing a virtualized environment, network traffic was actively intercepted using a packet analyzer during standard authentication and file upload operations. The objective of this capstone is to prove the vulnerability of plaintext transmissions to credential harvesting and data payload extraction, verifying the critical necessity of transport-layer encryption in enterprise networks.
+This laboratory project provides a practical demonstration contrasting the security baselines of the unencrypted File Transfer Protocol (FTP) against the secure, cryptographic Secure File Transfer Protocol (SFTP). Utilizing a virtualized environment, network traffic was actively intercepted using a packet analyzer during standard authentication and file upload operations. The objective of this capstone is to prove the vulnerability of p<img width="513" height="149" alt="Verification of unencrypted vsftpd configuration file parameters (local_enable and write_enable enabled)" src="https://github.com/user-attachments/assets/23c7d396-c402-455c-a2b4-15a3344e0605" />
+laintext transmissions to credential harvesting and data payload extraction, verifying the critical necessity of transport-layer encryption in enterprise networks.
 
 ## Environment Details
 *   **Operating System:** Kali Linux (Rolling Edition)
@@ -22,7 +23,8 @@ To establish an active laboratory environment, the target transfer protocols wer
 The File Transfer Protocol daemon (`vsftpd`) was modified to permit local user logging and administrative data-writing privileges.
 
 ```text
-<img width="513" height="149" alt="Verification of unencrypted vsftpd configuration file parameters (local_enable and write_enable enabled)" src="https://github.com/user-attachments/assets/ab6a67bd-b03e-4500-800f-2d4fd673bf1e" />
+<img width="513" height="149" alt="Verification of unencrypted vsftpd configuration file parameters (local_enable and write_enable enabled)" src="https://github.com/user-attachments/assets/7902f2fc-adee-4dea-9de4-892e16d69885" />
+
 
 Figure 1.1: Verification of unencrypted vsftpd configuration file parameters (local_enable and write_enable enabled).
 ```
@@ -31,13 +33,15 @@ Figure 1.1: Verification of unencrypted vsftpd configuration file parameters (lo
 A dedicated non-root account was created to validate standard authentication parameters alongside a dummy high-value payload file.
 
 ```text
-<img width="549" height="471" alt="Creation of the target test user account (labuser) on the local host" src="https://github.com/user-attachments/assets/32caa4f1-5e30-4d17-8a3a-b790b50d24cf" />
+<img width="549" height="471" alt="Creation of the target test user account (labuser) on the local host" src="https://github.com/user-attachments/assets/0ce00b92-4a36-4ada-80ec-e32237dfa70e" />
+
 
 Figure 1.2: Creation of the target test user account (labuser) on the local host.
 ```
 
 ```text
-<img width="747" height="56" alt="Creation of the sensitive plaintext payload file (secret txt) prior to network transmission" src="https://github.com/user-attachments/assets/b43acf06-4aca-4afc-81b9-959cb6cb724b" />
+<img width="747" height="56" alt="Creation of the sensitive plaintext payload file (secret txt) prior to network transmission" src="https://github.com/user-attachments/assets/9e89104e-f08d-48da-b9dd-5ac99940cd88" />
+
 
 Figure 1.3: Creation of the sensitive plaintext payload file (secret.txt) prior to network transmission.
 ```
